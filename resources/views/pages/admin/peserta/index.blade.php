@@ -1,0 +1,94 @@
+@extends('layouts.app')
+@section('title', 'Peserta Management')
+
+@section('content')
+<section class="section">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Daftar Peserta Kursus</h5>
+            <a href="{{ route('admin.peserta.create') }}" class="btn btn-primary">
+                <i class="bi bi-person-plus"></i> Tambah Peserta Baru
+            </a>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped" id="table-peserta">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>NIS</th>
+                        <th>Nama Lengkap</th>
+                        <th>No. HP</th>
+                        <th>Asal Sekolah</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pesertas as $p)
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td><span class="badge bg-light-secondary">{{ $p->nis }}</span></td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="fw-bold">{{ $p->nama_lengkap }}</span>
+                                <small class="text-muted">{{ $p->user->email ?? '' }}</small>
+                            </div>
+                        </td>
+                        <td>{{ $p->no_hp }}</td>
+                        <td>{{ $p->asal_sekolah ?? '-' }}</td>
+                        <td>
+                            @if($p->status_aktif)
+                                <span class="badge bg-success">Aktif</span>
+                            @else
+                                <span class="badge bg-danger">Non-Aktif</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ route('admin.peserta.edit', $p->id) }}" class="btn btn-sm btn-outline-warning">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $p->id }}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                            {{-- Form hidden untuk delete --}}
+                            <form id="delete-form-{{ $p->id }}" action="{{ route('admin.peserta.destroy', $p->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@push('scripts')
+<script>
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data peserta ini akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit form tersembunyi
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
+@endsection
