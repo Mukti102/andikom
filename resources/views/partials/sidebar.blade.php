@@ -61,6 +61,24 @@
                         <span>Peserta</span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ isActive('admin.tools.*') }}">
+                    <a href="{{ route('admin.tools.index') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Software</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ isActive('admin.courses.*') }}">
+                    <a href="{{ route('admin.courses.index') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Kursus</span>
+                    </a>
+                </li>
+                {{-- <li class="sidebar-item {{ isActive('admin.pendaftaran.*') }}">
+                    <a href="{{ route('admin.pendaftaran.index') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Pendaftaran</span>
+                    </a>
+                </li> --}}
 
                 <li class="sidebar-item has-sub">
                     <a href="#" class="sidebar-link">

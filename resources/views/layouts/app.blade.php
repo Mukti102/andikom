@@ -30,8 +30,8 @@
             @include('partials.footer')
         </div>
     </div>
-    @stack('scripts')
     @include('includes.scripts')
+    @stack('scripts')
 </body>
 
 </html>

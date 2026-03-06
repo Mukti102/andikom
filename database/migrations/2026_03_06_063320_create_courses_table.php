@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('durasi_jam');
             $table->integer('jumlah_pertemuan')->nullable();
             $table->decimal('jumlah_total', 10, 2);
+            $table->integer('max_slot')->default(1);
             $table->timestamps();
         });
     }

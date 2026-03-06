@@ -11,7 +11,7 @@
             </a>
         </div>
         <div class="card-body">
-            <table class="table table-striped" id="table-peserta">
+            <table class="table table-striped" id="table1">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -66,29 +66,5 @@
     </div>
 </section>
 
-@push('scripts')
-<script>
-    document.querySelectorAll('.btn-delete').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data peserta ini akan dihapus permanen!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Submit form tersembunyi
-                    document.getElementById('delete-form-' + id).submit();
-                }
-            });
-        });
-    });
-</script>
-@endpush
+
 @endsection

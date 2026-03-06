@@ -36,4 +36,9 @@ class Peserta extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function pendaftarans()
+    {
+        return $this->hasMany(Pendaftaran::class, 'peserta_id');
+    }
 }

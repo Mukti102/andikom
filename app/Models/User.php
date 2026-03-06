@@ -26,9 +26,9 @@ class User extends Authenticatable
     ];
 
     public function peserta()
-{
-    return $this->hasOne(Peserta::class);
-}
+    {
+        return $this->hasOne(Peserta::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
