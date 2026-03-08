@@ -17,6 +17,10 @@ class Pendaftaran extends Model
         return $this->belongsTo(Peserta::class, 'peserta_id');
     }
 
+    public function nilai(){
+        return $this->hasOne(Nilai::class);
+    }
+
     public function tagihans()
     {
         return $this->hasMany(Tagihan::class, 'pendaftaran_id');

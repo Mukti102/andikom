@@ -66,13 +66,16 @@
                                                     <span class="text-success font-bold"><i class="bi bi-check-circle"></i>
                                                         Lunas</span>
                                                 @elseif($pembayaranPending)
-                                                    {{-- <span class="badge bg-secondary">Menunggu Verifikasi</span> --}}
-                                                    <button type="button" class="btn btn-sm btn-info btn-verifikasi"
-                                                        data-id="{{ $pembayaran->id ?? '' }}"
-                                                        data-nominal="{{ $pembayaran->nominal ?? 0 }}"
-                                                        data-bukti="{{ $pembayaran ? asset('storage/' . $pembayaran->bukti_bayar) : '' }}">
-                                                        Verifikasi
-                                                    </button>
+                                                    @if (!auth()->user()->isAdmin())
+                                                        <button type="button" class="btn btn-sm btn-info btn-verifikasi"
+                                                            data-id="{{ $pembayaran->id ?? '' }}"
+                                                            data-nominal="{{ $pembayaran->nominal ?? 0 }}"
+                                                            data-bukti="{{ $pembayaran ? asset('storage/' . $pembayaran->bukti_bayar) : '' }}">
+                                                            Verifikasi
+                                                        </button>
+                                                    @elseif(auth()->user()->isUser())
+                                                        <span class="badge bg-secondary">Menunggu Verifikasi</span>
+                                                    @endif
                                                 @else
                                                     <button class="btn btn-sm btn-primary btn-bayar"
                                                         data-id="{{ $t->id }}"

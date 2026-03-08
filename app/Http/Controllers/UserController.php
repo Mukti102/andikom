@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::orderBy('created_at', 'desc')->where('role', '!=', 'user')->get();
         return view('pages.admin.users.index', compact('users'));
     }
 
@@ -48,7 +48,7 @@ class UserController extends Controller
 
         $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users,email,'.$id,
+            'email'    => 'required|string|email|max:255|unique:users,email,' . $id,
             'phone'    => 'nullable|string|max:15',
             'role'     => 'required|in:user,admin,tutor,pimpinan',
             'password' => 'nullable|string|min:8', // Password opsional saat edit
@@ -77,7 +77,7 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
-        
+
         // Opsional: Hapus avatar jika ada filenya di storage
         if ($user->avatar) {
             Storage::delete('public/' . $user->avatar);

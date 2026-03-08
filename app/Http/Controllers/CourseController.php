@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
+use App\Models\Pendaftaran;
 use App\Models\Peserta;
 use App\Models\Tool;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -44,6 +46,15 @@ class CourseController extends Controller
 
         return redirect()->route('admin.courses.index')
             ->with('success', 'Kursus berhasil ditambahkan!');
+    }
+
+    public function user()
+    {
+        $user = Auth::user();
+        $courses = Course::whereHas('pendaftarans', function ($query) use ($user) {
+            $query->where('peserta_id', $user->peserta->id);
+        })->with('pendaftarans')->get();
+        return view('pages.user.courses.index', compact('courses', 'user'));
     }
 
     public function pendaftar($id)

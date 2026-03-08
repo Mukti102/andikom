@@ -46,7 +46,7 @@
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route('admin.peserta.edit', $p->id) }}" class="btn btn-sm btn-outline-warning">
-                                    <i class="bi bi-pencil"></i> Edit
+                                    <i class="bi bi-pencil"></i>
                                 </a>
                                 <button class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $p->id }}">
                                     <i class="bi bi-trash"></i>

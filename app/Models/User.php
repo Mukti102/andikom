@@ -30,6 +30,26 @@ class User extends Authenticatable
         return $this->hasOne(Peserta::class);
     }
 
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
+
+    public function isTutor()
+    {
+        return $this->role === 'tutor';
+    }
+
+    public function isOwner()
+    {
+        return $this->role === 'owner';
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

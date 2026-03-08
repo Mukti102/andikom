@@ -76,7 +76,7 @@
                                     <div class="btn-group">
                                         <a href="{{ route('admin.tagihans', $p->id) }}"
                                             class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-pencil"></i>
+                                            <i class="bi bi-credit-card"></i>
                                         </a>
                                         <button class="btn btn-sm btn-outline-warning btn-edit"
                                             data-id="{{ $p->id }}" data-json="{{ json_encode($p) }}">

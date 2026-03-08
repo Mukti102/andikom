@@ -73,12 +73,36 @@
                         <span>Kursus</span>
                     </a>
                 </li>
-                {{-- <li class="sidebar-item {{ isActive('admin.pendaftaran.*') }}">
-                    <a href="{{ route('admin.pendaftaran.index') }}" class="sidebar-link">
+                <li class="sidebar-item {{ isActive('user.courses.*') }}">
+                    <a href="{{ route('user.courses.index') }}" class="sidebar-link">
                         <i class="fa-fw fas fa-users"></i>
-                        <span>Pendaftaran</span>
+                        <span>Kursus User</span>
                     </a>
-                </li> --}}
+                </li>
+                <li class="sidebar-item {{ isActive('admin.jadwal.*') }}">
+                    <a href="{{ route('admin.jadwal.index') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Jadwal</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
+                    <a href="{{ route('pembelajaran.index') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Kelola Pembelajaran</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ isActive('admin.announcment.*') }}">
+                    <a href="{{ route('admin.announcment.index') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Pengumuman</span>
+                    </a>
+                </li>
+                <li class="sidebar-item {{ isActive('cash.flow.*') }}">
+                    <a href="{{ route('cash.flow') }}" class="sidebar-link">
+                        <i class="fa-fw fas fa-users"></i>
+                        <span>Arus Kas</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

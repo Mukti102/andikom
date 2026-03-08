@@ -14,6 +14,11 @@ class Course extends Model
         return $this->hasMany(Pendaftaran::class, 'course_id');
     }
 
+    public function materis()
+    {
+        return $this->hasMany(Materi::class, 'course_id');
+    }
+
     public function tools()
     {
         return $this->belongsToMany(Tool::class, 'course_tool');

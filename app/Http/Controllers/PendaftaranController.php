@@ -79,6 +79,12 @@ class PendaftaranController extends Controller
         return view('pages.admin.tagihan.index', compact('pendaftaran'));
     }
 
+    public function userTagihan($id)
+    {
+        $pendaftaran = Pendaftaran::with('tagihans')->where('peserta_id', $id)->first();
+        return view('pages.admin.tagihan.index', compact('pendaftaran'));
+    }
+
     /**
      * Display the specified resource.
      */

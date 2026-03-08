@@ -41,7 +41,7 @@
                                         <span class="badge bg-success">Admin</span> {{-- Hijau Putih --}}
                                     @elseif($user->role == 'user')
                                         <span class="badge bg-primary">Peserta</span> {{-- Biru Putih --}}
-                                    @elseif($user->role == 'pengajar')
+                                    @elseif($user->role == 'tutor')
                                         <span class="badge bg-warning text-dark">Pengajar</span> {{-- Kuning Putih --}}
                                     @elseif($user->role == 'pimpinan')
                                         <span class="badge bg-danger">Pimpinan</span> {{-- Merah Putih --}}

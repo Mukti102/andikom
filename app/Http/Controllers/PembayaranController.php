@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PembayaranRequest;
+use App\Mail\PaymentEmail;
+use App\Mail\VerifiedPaymentEmail;
 use App\Models\Pembayaran;
 use App\Models\Tagihan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class PembayaranController extends Controller
@@ -43,7 +47,7 @@ class PembayaranController extends Controller
             }
 
             // 2. Simpan Data Pembayaran
-            Pembayaran::create([
+            $pembayaran =  Pembayaran::create([
                 'tagihan_id'        => $request->tagihan_id,
                 'angsuran_ke'       => $request->angsuran_ke,
                 'nominal'           => $request->nominal,
@@ -51,6 +55,11 @@ class PembayaranController extends Controller
                 'bukti_bayar'       => $path,
                 'status_verifikasi' => 'pending',
             ]);
+
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Mail::to($admin->email)->queue(new PaymentEmail($pembayaran));
+            }
 
             DB::commit();
 
@@ -74,7 +83,7 @@ class PembayaranController extends Controller
             'reason'            => 'required_if:status_verifikasi,rejected|nullable|string',
         ]);
 
-        $pembayaran = Pembayaran::findOrFail($id);
+        $pembayaran = Pembayaran::with('tagihan.pendaftaran.peserta.user')->findOrFail($id);
 
         try {
             DB::transaction(function () use ($request, $pembayaran) {
@@ -91,6 +100,10 @@ class PembayaranController extends Controller
                     $tagihan->update(['status' => 'paid']);
                 }
             });
+
+            $emailTujuan = $pembayaran->tagihan->pendaftaran->peserta->user->email;
+
+            Mail::to($emailTujuan)->queue(new VerifiedPaymentEmail($pembayaran));
 
             return redirect()->back()->with('success', 'Status verifikasi berhasil diperbarui.');
         } catch (\Exception $e) {

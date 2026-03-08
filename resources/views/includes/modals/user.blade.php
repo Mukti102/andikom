@@ -25,7 +25,7 @@
                         <select name="role" class="form-select">
                             <option value="peserta">Peserta (Biru)</option>
                             <option value="admin">Admin (Hijau)</option>
-                            <option value="pengajar">Pengajar (Kuning)</option>
+                            <option value="tutor">Pengajar (Kuning)</option>
                             <option value="pimpinan">Pimpinan (Merah)</option>
                         </select>
                     </div>
@@ -71,7 +71,7 @@
                         <select name="role" id="edit_role" class="form-select">
                             <option value="user">Peserta (Biru)</option>
                             <option value="admin">Admin (Hijau)</option>
-                            <option value="pengajar">Pengajar (Kuning)</option>
+                            <option value="tutor">Pengajar (Kuning)</option>
                             <option value="pimpinan">Pimpinan (Merah)</option>
                         </select>
                     </div>
