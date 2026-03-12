@@ -3,14 +3,12 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.html"><img src="/assets/compiled/svg/logo.svg" alt="Logo" srcset="" /></a>
+                    <a href="{{ route('dashboard') }}"><img src="/assets/compiled/svg/logo.svg" alt="Logo" /></a>
                 </div>
+                {{-- Theme Toggle --}}
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20"
-                        height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
-                        <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
-                            stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 21 21">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2"
                                 opacity=".3"></path>
@@ -25,9 +23,7 @@
                         <input class="form-check-input me-0" type="checkbox" id="toggle-dark" style="cursor: pointer" />
                         <label class="form-check-label"></label>
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20"
-                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                         <path fill="currentColor"
                             d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z">
                         </path>
@@ -38,72 +34,136 @@
                 </div>
             </div>
         </div>
+
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
+                <li class="sidebar-title">Utama</li>
 
-                <li class="sidebar-item {{ isActive('admin.dashboard') }}">
-                    <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
+                <li class="sidebar-item {{ isActive('dashboard') }}">
+                    <a href="{{ route('dashboard') }}" class="sidebar-link">
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
-                <li class="sidebar-item {{ isActive('admin.users.*') }}">
-                    <a href="{{ route('admin.users.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>User</span>
+
+                @if (auth()->user()->isAdmin() || auth()->user()->isOwner())
+                    <li class="sidebar-title">Data Master</li>
+
+                    <li class="sidebar-item {{ isActive('admin.users.*') }}">
+                        <a href="{{ route('admin.users.index') }}" class="sidebar-link">
+                            <i class="bi bi-person-badge-fill"></i>
+                            <span>Kelola User</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ isActive('admin.peserta.*') }}">
+                        <a href="{{ route('admin.peserta.index') }}" class="sidebar-link">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Database Peserta</span>
+                        </a>
+                    </li>
+                @endif
+
+
+                {{-- Group: Data Master (Hanya Admin) --}}
+                @if (auth()->user()->isAdmin())
+                    <li class="sidebar-item {{ isActive('admin.tools.*') }}">
+                        <a href="{{ route('admin.tools.index') }}" class="sidebar-link">
+                            <i class="bi bi-pc-display-horizontal"></i>
+                            <span>Software/Tools</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-title">Akademik</li>
+
+                    <li class="sidebar-item {{ isActive('admin.courses.*') }}">
+                        <a href="{{ route('admin.courses.index') }}" class="sidebar-link">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                            <span>Daftar Kursus</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ isActive('admin.jadwal.*') }}">
+                        <a href="{{ route('admin.jadwal.index') }}" class="sidebar-link">
+                            <i class="bi bi-calendar3"></i>
+                            <span>Jadwal Kelas</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
+                        <a href="{{ route('pembelajaran.index') }}" class="sidebar-link">
+                            <i class="bi bi-mortarboard-fill"></i>
+                            <span>Materi & Nilai</span>
+                        </a>
+                    </li>
+
+
+                    <li class="sidebar-item {{ isActive('admin.announcment.*') }}">
+                        <a href="{{ route('admin.announcment.index') }}" class="sidebar-link">
+                            <i class="bi bi-megaphone-fill"></i>
+                            <span>Pengumuman</span>
+                        </a>
+                    </li>
+                @endif
+
+
+                @if (auth()->user()->isAdmin() || auth()->user()->isOwner())
+                    <li class="sidebar-title">Laporan & Keuangan</li>
+
+                    <li class="sidebar-item {{ isActive('cash.flow.*') }}">
+                        <a href="{{ route('cash.flow') }}" class="sidebar-link">
+                            <i class="bi bi-cash-stack"></i>
+                            <span>Arus Kas</span>
+                        </a>
+                    </li>
+                @endif
+
+
+
+
+
+
+                {{-- User Section --}}
+                @if (!auth()->user()->isAdmin() && !auth()->user()->isOwner())
+                    <li class="sidebar-title">Pembelajaran</li>
+                    <li class="sidebar-item {{ isActive('user.courses.*') }}">
+                        <a href="{{ route('user.courses.index') }}" class="sidebar-link">
+                            <i class="bi bi-book-half"></i>
+                            <span>Kursus Saya</span>
+                        </a>
+                    </li>
+                @endif
+
+                <li class="sidebar-title">Pengaturan</li>
+
+                <li class="sidebar-item {{ isActive('profile.*') }}">
+                    <a href="{{ route('profile.edit') }}" class="sidebar-link">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Profil Saya</span>
                     </a>
                 </li>
-                <li class="sidebar-item {{ isActive('admin.peserta.*') }}">
-                    <a href="{{ route('admin.peserta.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Peserta</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('admin.tools.*') }}">
-                    <a href="{{ route('admin.tools.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Software</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('admin.courses.*') }}">
-                    <a href="{{ route('admin.courses.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Kursus</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('user.courses.*') }}">
-                    <a href="{{ route('user.courses.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Kursus User</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('admin.jadwal.*') }}">
-                    <a href="{{ route('admin.jadwal.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Jadwal</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
-                    <a href="{{ route('pembelajaran.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Kelola Pembelajaran</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('admin.announcment.*') }}">
-                    <a href="{{ route('admin.announcment.index') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Pengumuman</span>
-                    </a>
-                </li>
-                <li class="sidebar-item {{ isActive('cash.flow.*') }}">
-                    <a href="{{ route('cash.flow') }}" class="sidebar-link">
-                        <i class="fa-fw fas fa-users"></i>
-                        <span>Arus Kas</span>
+
+                @if (auth()->user()->isAdmin())
+                    <li class="sidebar-item {{ isActive('setting.*') }}">
+                        <a href="{{ route('setting.index') }}" class="sidebar-link">
+                            <i class="bi bi-gear-fill"></i>
+                            <span>Setelan Sistem</span>
+                        </a>
+                    </li>
+                @endif
+
+
+
+                <li class="sidebar-item mt-3">
+                    <a href="#" class="sidebar-link text-danger"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="bi bi-box-arrow-right text-danger"></i>
+                        <span>Keluar</span>
                     </a>
                 </li>
             </ul>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </div>
     </div>
 </div>

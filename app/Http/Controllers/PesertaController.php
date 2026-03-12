@@ -33,7 +33,7 @@ class PesertaController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(PesertaRequest $request)
-    {
+    {   
         // Jika sampai di sini, artinya data sudah lolos validasi
         Peserta::create($request->validated());
 
@@ -50,7 +50,7 @@ class PesertaController extends Controller
             // Konversi status_aktif ke boolean (0 atau 1)
             $data['status_aktif'] = $request->has('status_aktif') ? (bool)$request->status_aktif : false;
             $peserta->update($data);
-            return redirect()->route('admin.peserta.index')
+            return redirect()->back()
                 ->with('success', 'Data peserta berhasil diperbarui.');
         } catch (Exception $th) {
             dd($th->getMessage());

@@ -13,7 +13,7 @@
                     </ul>
                 </div>
             @endif
-            <form action="{{ route('admin.courses.update', $course->id) }}" method="POST">
+            <form action="{{ route('admin.courses.update', $course->id) }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -36,9 +36,12 @@
                 <x-form-input label="Total Harga (IDR)" name="jumlah_total" type="number" step="0.01" :value="$course->jumlah_total"
                     required />
 
+
+
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">Pilih Tools</label>
-                    <div class="border p-3 rounded" >
+                    <div class="border p-3 rounded">
                         @foreach ($tools as $tool)
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="tools[]" value="{{ $tool->id }}"
@@ -54,6 +57,8 @@
 
                 <x-form-input label="Max Slot" name="max_slot" type="number" step="1" :value="$course->max_slot" required />
 
+
+                <x-form-input label="Thumbnail" name="thumbnail" type="file" required />
 
 
                 <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary">Batal</a>

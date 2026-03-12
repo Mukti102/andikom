@@ -16,7 +16,10 @@
                                 <th class="text-center">{{ $tool->name }}</th>
                             @endforeach
                             <th>Nomor Sertifikat</th>
-                            <th class="text-center">Action</th>
+                            @if (auth()->user()->isAdmin())
+                                <th class="text-center">Action</th>
+                            @endif
+
                         </tr>
                     </thead>
                     <tbody>
@@ -54,10 +57,13 @@
                                 <td>{{ $pendaftaran->nilai->nomor_sertifikat ?? '-' }}</td>
 
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#nilaiModal{{ $pendaftaran->id }}">
-                                        <i class="bi bi-pencil-square"></i> Set Nilai
-                                    </button>
+                                    @if (auth()->user()->isAdmin())
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#nilaiModal{{ $pendaftaran->id }}">
+                                            <i class="bi bi-pencil-square"></i> Set Nilai
+                                        </button>
+                                    @endif
+
                                     {{-- <a class="btn btn-sm btn-primary"
                                         href="{{ route('pembelajaran.nilai.sertifikat', $pendaftaran->id) }}">
                                         <i class="bi bi-pencil-square"></i> Cetak Sertifikat

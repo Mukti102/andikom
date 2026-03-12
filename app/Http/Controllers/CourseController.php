@@ -9,6 +9,9 @@ use App\Models\Peserta;
 use App\Models\Tool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CourseController extends Controller
 {
@@ -37,7 +40,11 @@ class CourseController extends Controller
     {
         $data = $request->validated();
 
-        // 2. Buat record Course
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $data['thumbnail'] = $path;
+        }
+
         $course = Course::create($data);
 
         if ($request->has('tools')) {
@@ -47,6 +54,8 @@ class CourseController extends Controller
         return redirect()->route('admin.courses.index')
             ->with('success', 'Kursus berhasil ditambahkan!');
     }
+
+
 
     public function user()
     {
@@ -67,12 +76,19 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Course $course)
+    public function show($id)
     {
-        //
+
+        $course = Course::find($id);
+        $course->load('tools');
+        // Ambil data peserta milik user yang login
+        $peserta = auth()->user()->peserta;
+
+
+        return view('pages.user.courses.detail', compact('course', 'peserta'));
     }
 
-    /**
+    /**c
      * Show the form for editing the specified resource.
      */
     public function edit(Course $course)
@@ -81,23 +97,27 @@ class CourseController extends Controller
         return view('pages.admin.courses.edit', compact('course', 'tools'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(CourseRequest $request, Course $course)
     {
-        // 1. Validasi sudah dilakukan oleh CourseRequest
+       
+
         $data = $request->validated();
 
-        // 2. Update data course (kecuali tools)
+        if ($request->hasFile('thumbnail')) {
+            if ($course->thumbnail && Storage::disk('public')->exists($course->thumbnail)) {
+                Storage::disk('public')->delete($course->thumbnail);
+            }
+
+            $data['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
         $course->update($data);
 
-        // 3. Update relasi tools menggunakan sync
-        // Jika tidak ada tools yang dicentang, kita kirim array kosong [] agar semua relasi lama dihapus
         $course->tools()->sync($request->tools ?? []);
 
         return redirect()->route('admin.courses.index')
-            ->with('success', 'Data kursus dan tools berhasil diperbarui!');
+            ->with('success', 'Data kursus dan thumbnail berhasil diperbarui!');
     }
 
     /**
@@ -105,8 +125,26 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
-        return redirect()->route('admin.courses.index')
-            ->with('success', 'Kursus berhasil dihapus!');
+        try {
+            DB::beginTransaction();
+
+            if ($course->thumbnail && Storage::disk('public')->exists($course->thumbnail)) {
+                Storage::disk('public')->delete($course->thumbnail);
+            }
+
+            $course->delete();
+
+            DB::commit();
+
+            return redirect()->route('admin.courses.index')
+                ->with('success', 'Kursus berhasil dihapus!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error("Gagal menghapus kursus: " . $e->getMessage());
+
+            return redirect()->route('admin.courses.index')
+                ->with('error', 'Terjadi kesalahan saat menghapus kursus.');
+        }
     }
 }

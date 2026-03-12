@@ -137,7 +137,7 @@
 
         // Fungsi buka modal Tambah
         document.querySelector('.btn-tambah').addEventListener('click', () => {
-            form.action = "{{ route('admin.pendaftaran.store') }}";
+            form.action = "{{ route('pendaftaran.store') }}";
             document.getElementById('methodField').innerHTML = ''; // Reset method
             document.getElementById('modalTitle').innerText = 'Tambah Pendaftaran';
             modal.show();

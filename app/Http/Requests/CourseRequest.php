@@ -21,6 +21,13 @@ class CourseRequest extends FormRequest
             'category'             => 'required|in:private,intensif',
             'jumlah_total'         => 'required|numeric',
             'max_slot'             => 'required|integer',
+            'thumbnail' => [
+                'required',
+                'image',
+                'mimes:jpeg,png,jpg,webp',
+                'mimetypes:image/jpeg,image/png,image/jpg,image/webp', // Menambahkan MIME eksplisit
+                'max:2048'
+            ],
 
             // durasi_jam wajib diisi untuk KEDUANYA
             'durasi_jam'           => 'required|integer',

@@ -9,10 +9,12 @@
                 <p class="text-muted mb-0">Kelola modul pembelajaran untuk kursus <strong>{{ $course->name }}</strong>.</p>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                <a href="{{ route('pembelajaran.materi.create', $course->id) }}"
-                    class="btn btn-primary rounded-pill px-4 shadow-sm">
-                    <i class="bi bi-plus-lg me-1"></i> Tambah Materi
-                </a>
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('pembelajaran.materi.create', $course->id) }}"
+                        class="btn btn-primary rounded-pill px-4 shadow-sm">
+                        <i class="bi bi-plus-lg me-1"></i> Tambah Materi
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -55,34 +57,37 @@
                                         <i class="bi bi-info-circle"></i>
                                     </button>
 
-                                    <button type="button"
-                                        class="btn btn-outline-secondary rounded-3 dropdown-toggle dropdown-toggle-split"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="visually-hidden">Toggle Dropdown</span>
-                                    </button>
+                                    @if (auth()->user()->isAdmin())
+                                        <button type="button"
+                                            class="btn btn-outline-secondary rounded-3 dropdown-toggle dropdown-toggle-split"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span class="visually-hidden">Toggle Dropdown</span>
+                                        </button>
 
-                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('pembelajaran.materi.edit', $materi->id) }}">
-                                                <i class="bi bi-pencil me-2 text-warning"></i>Edit
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li>
-                                            <form action="{{ route('pembelajaran.materi.destroy', $materi->id) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger">
-                                                    <i class="bi bi-trash me-2"></i>Hapus
-                                                </button>
-                                            </form>
-                                        </li>
-                                    </ul>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('pembelajaran.materi.edit', $materi->id) }}">
+                                                    <i class="bi bi-pencil me-2 text-warning"></i>Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('pembelajaran.materi.destroy', $materi->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus materi ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="bi bi-trash me-2"></i>Hapus
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>

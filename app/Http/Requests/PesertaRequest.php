@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PesertaRequest extends FormRequest
 {
@@ -19,11 +20,16 @@ class PesertaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $pesertaId = $this->route('peserta'); // Mengambil ID dari route jika sedang update
+        $pesertaId = $this->route('pesertum');
 
         return [
             'user_id'               => 'required|exists:users,id',
-            'nis'                   => 'required|string|max:50|unique:peserta,nis,' . $pesertaId,
+            'nis'               => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('peserta', 'nis')->ignore($pesertaId),
+            ],
             'nama_lengkap'          => 'required|string|max:255',
             'nama_panggilan'        => 'nullable|string|max:50',
             'tempat_lahir'          => 'required|string|max:100',
@@ -34,13 +40,13 @@ class PesertaRequest extends FormRequest
             'pekerjaan'             => 'nullable|string|max:100',
             'no_hp'                 => 'required|string|max:20',
             'asal_sekolah'          => 'nullable|string|max:100',
-            
+
             // Data Keluarga
             'nama_ayah'             => 'required|string|max:255',
             'nama_ibu'              => 'required|string|max:255',
             'hp_orang_tua'          => 'required|string|max:20',
             'status_tempat_tinggal' => 'required|string|max:100',
-            
+
             'status_aktif'          => 'nullable|boolean'
         ];
     }

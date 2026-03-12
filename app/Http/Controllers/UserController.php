@@ -24,7 +24,7 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'phone'    => 'nullable|string|max:15',
-            'role'     => 'required|in:user,admin,tutor,pimpinan',
+            'role'     => 'required|in:user,admin,tutor,owner',
             'password' => 'required|string|min:8',
         ]);
 
@@ -50,7 +50,7 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users,email,' . $id,
             'phone'    => 'nullable|string|max:15',
-            'role'     => 'required|in:user,admin,tutor,pimpinan',
+            'role'     => 'required|in:user,admin,tutor,owner',
             'password' => 'nullable|string|min:8', // Password opsional saat edit
         ]);
 

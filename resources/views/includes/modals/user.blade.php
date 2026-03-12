@@ -23,10 +23,10 @@
                     <div class="form-group mt-2">
                         <label>Role</label>
                         <select name="role" class="form-select">
-                            <option value="peserta">Peserta (Biru)</option>
+                            <option value="user">User (Biru)</option>
                             <option value="admin">Admin (Hijau)</option>
                             <option value="tutor">Pengajar (Kuning)</option>
-                            <option value="pimpinan">Pimpinan (Merah)</option>
+                            <option value="owner">Pimpinan (Merah)</option>
                         </select>
                     </div>
                     <div class="form-group mt-2">
@@ -69,10 +69,10 @@
                     <div class="form-group mt-2">
                         <label>Role</label>
                         <select name="role" id="edit_role" class="form-select">
-                            <option value="user">Peserta (Biru)</option>
+                            <option value="user">User (Biru)</option>
                             <option value="admin">Admin (Hijau)</option>
                             <option value="tutor">Pengajar (Kuning)</option>
-                            <option value="pimpinan">Pimpinan (Merah)</option>
+                            <option value="owner">Pimpinan (Merah)</option>
                         </select>
                     </div>
                     <div class="form-group mt-3">

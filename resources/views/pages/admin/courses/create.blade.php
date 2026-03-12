@@ -13,7 +13,7 @@
                     </ul>
                 </div>
             @endif
-            <form action="{{ route('admin.courses.store') }}" method="POST">
+            <form action="{{ route('admin.courses.store') }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 <x-form-input label="Nama Paket" name="name_paket" required />
 
@@ -31,6 +31,7 @@
 
                 <x-form-input label="Total Harga (IDR)" name="jumlah_total" type="number" step="0.01" required />
                 <x-form-input label="Max Slot" name="max_slot" type="number" step="1" required />
+                <x-form-input label="Thumbnail" name="thumbnail" type="file" required />
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Pilih Tools</label>

@@ -24,6 +24,11 @@ class Course extends Model
         return $this->belongsToMany(Tool::class, 'course_tool');
     }
 
+    public function getFormattedPriceAttribute()
+    {
+        return 'Rp ' . number_format($this->jumlah_total, 0, ',', '.');
+    }
+
     // app/Models/Course.php
     public function getSisaSlotAttribute()
     {

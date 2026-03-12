@@ -66,7 +66,7 @@
                                                     <span class="text-success font-bold"><i class="bi bi-check-circle"></i>
                                                         Lunas</span>
                                                 @elseif($pembayaranPending)
-                                                    @if (!auth()->user()->isAdmin())
+                                                    @if (auth()->user()->isAdmin())
                                                         <button type="button" class="btn btn-sm btn-info btn-verifikasi"
                                                             data-id="{{ $pembayaran->id ?? '' }}"
                                                             data-nominal="{{ $pembayaran->nominal ?? 0 }}"

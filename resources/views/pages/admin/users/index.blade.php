@@ -1,7 +1,15 @@
 @extends('layouts.app')
 @section('title', 'User Management')
 @section('content')
-
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <section class="section">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -43,8 +51,8 @@
                                         <span class="badge bg-primary">Peserta</span> {{-- Biru Putih --}}
                                     @elseif($user->role == 'tutor')
                                         <span class="badge bg-warning text-dark">Pengajar</span> {{-- Kuning Putih --}}
-                                    @elseif($user->role == 'pimpinan')
-                                        <span class="badge bg-danger">Pimpinan</span> {{-- Merah Putih --}}
+                                    @elseif($user->role == 'owner')
+                                        <span class="badge bg-info">Pimpinan</span> {{-- Merah Putih --}}
                                     @endif
                                 </td>
                                 <td>
@@ -74,12 +82,12 @@
 
 @endsection
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        
+    document.addEventListener('DOMContentLoaded', function() {
+
         // LOGIKA UNTUK MODAL EDIT
         const editButtons = document.querySelectorAll('.btn-edit');
         editButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
                 const name = this.getAttribute('data-name');
                 const email = this.getAttribute('data-email');
@@ -101,9 +109,9 @@
         // LOGIKA UNTUK MODAL DELETE
         const deleteButtons = document.querySelectorAll('.btn-delete');
         deleteButtons.forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                
+
                 // Update URL Action Form Delete
                 document.getElementById('deleteForm').action = '/admin/users/' + id;
             });

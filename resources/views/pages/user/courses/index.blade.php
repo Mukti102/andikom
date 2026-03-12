@@ -6,9 +6,6 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Daftar Paket Kursus</h5>
-                <a href="{{ route('admin.courses.create') }}" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Tambah Kursus Baru
-                </a>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table1">
