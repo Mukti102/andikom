@@ -15,10 +15,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
+use App\Models\Course;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $courses = Course::all();
+    return view('welcome', compact('courses'));
 });
 
 
@@ -27,6 +29,7 @@ Route::get('/', function () {
 Route::middleware('auth', 'role:admin,owner')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('peserta', PesertaController::class)->except('update');
+    Route::get('/peserta-export', [PesertaController::class, 'exportPDF'])->name('peserta.export');
     Route::resource('courses', CourseController::class);
     Route::resource('tools', ToolController::class);
     Route::get('/courses/{id}/pendaftar', [CourseController::class, 'pendaftar'])->name('course.pendaftar');
@@ -59,8 +62,8 @@ Route::middleware(['auth', 'role:admin,owner'])->group(function () {
     Route::post('arus-kas', [ExpenseController::class, 'store'])->name('cash.flow.store');
     Route::delete('arus-kas/{id}', [ExpenseController::class, 'destroy'])->name('cash.flow.destroy');
 
-    Route::get('/setting',[SettingController::class,'index'])->name('setting.index');
-    Route::post('/setting',[SettingController::class,'update'])->name('setting.update');
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
 });
 
 

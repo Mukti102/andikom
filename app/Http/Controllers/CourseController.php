@@ -58,7 +58,7 @@ class CourseController extends Controller
 
 
     public function user()
-    {
+    {   
         $user = Auth::user();
         $courses = Course::whereHas('pendaftarans', function ($query) use ($user) {
             $query->where('peserta_id', $user->peserta->id);

@@ -33,7 +33,12 @@
                             <td>
                                 <button class="btn btn-info btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#detailModal{{ $pendaftaran->id }}">Detail</button>
-                                <a class="btn btn-warning btn-sm" href="{{ route('pembelajaran.peserta.toogle', $pendaftaran->id) }}">Ubah Status</a>
+
+                                @if (auth()->user()->isAdmin())
+                                    <a class="btn btn-warning btn-sm"
+                                        href="{{ route('pembelajaran.peserta.toogle', $pendaftaran->id) }}">Ubah Status</a>
+                                @endif
+
                             </td>
                         </tr>
                         @include('includes.modals.detail-peserta')

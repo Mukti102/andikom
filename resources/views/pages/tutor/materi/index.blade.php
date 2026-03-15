@@ -9,7 +9,7 @@
                 <p class="text-muted mb-0">Kelola modul pembelajaran untuk kursus <strong>{{ $course->name }}</strong>.</p>
             </div>
             <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                @if (auth()->user()->isAdmin())
+                @if (auth()->user()->isAdmin() || auth()->user()->isTutor())
                     <a href="{{ route('pembelajaran.materi.create', $course->id) }}"
                         class="btn btn-primary rounded-pill px-4 shadow-sm">
                         <i class="bi bi-plus-lg me-1"></i> Tambah Materi
@@ -57,7 +57,7 @@
                                         <i class="bi bi-info-circle"></i>
                                     </button>
 
-                                    @if (auth()->user()->isAdmin())
+                                    @if (auth()->user()->isAdmin() || auth()->user()->isTutor())
                                         <button type="button"
                                             class="btn btn-outline-secondary rounded-3 dropdown-toggle dropdown-toggle-split"
                                             data-bs-toggle="dropdown" aria-expanded="false">

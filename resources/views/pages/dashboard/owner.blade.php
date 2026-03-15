@@ -6,9 +6,9 @@
         {{-- Stats Row --}}
         <div class="row g-4 mb-5">
             <div class="col-md-3">
-                <div class="card p-3 shadow-sm border-0 bg-primary ">
-                    <h6>Total Pendapatan</h6>
-                    <h3>Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}</h3>
+                <div class="card  p-3 shadow-sm border-0 bg-primary ">
+                    <h6 class="text-light">Total Pendapatan</h6>
+                    <h3 class="text-light">Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}</h3>
                 </div>
             </div>
             <div class="col-md-3">

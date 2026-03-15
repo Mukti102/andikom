@@ -12,19 +12,20 @@ class PembelajaranController extends Controller
     public function index()
     {
         $auth = Auth::user();
+
         if ($auth->isAdmin()) {
+            // Admin melihat semua course
             $courses = Course::all();
+        } elseif ($auth->isTutor()) {
+            // Tutor melihat course yang memiliki jadwal atas nama dirinya
+            $courses = Course::whereHas('jadwals', function ($query) use ($auth) {
+                $query->where('tutor_id', $auth->id);
+            })->get();
         } else {
-            $pendaftaranku = Pendaftaran::with(['course', 'nilai'])
-                ->where('peserta_id', $auth->peserta->id)
-                ->get();
-
-            // 2. Ambil semua ID course yang diikuti peserta
-            $courseIds = $pendaftaranku->pluck('course_id');
-
-            // 3. Ambil jadwal untuk course-course tersebut
-            $courses = Course::whereIn('id', $courseIds)
-                ->get();
+            // User/Peserta melihat course yang mereka daftar
+            $courses = Course::whereHas('pendaftarans', function ($query) use ($auth) {
+                $query->where('peserta_id', $auth->peserta->id);
+            })->get();
         }
 
         return view('pages.admin.pembelajaran.index', compact('courses'));

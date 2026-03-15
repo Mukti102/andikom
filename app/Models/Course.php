@@ -19,6 +19,11 @@ class Course extends Model
         return $this->hasMany(Materi::class, 'course_id');
     }
 
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class);
+    }
+
     public function tools()
     {
         return $this->belongsToMany(Tool::class, 'course_tool');

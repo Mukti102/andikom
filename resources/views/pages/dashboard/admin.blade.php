@@ -71,8 +71,8 @@
             <div class="col-12 col-lg-12">
                 <div class="card border-0 shadow-sm rounded-1 overflow-hidden">
                     <div
-                        class="card-header bg-primary py-3 d-flex justify-content-between align-items-center border-bottom-0">
-                        <h5 class="mb-0 fw-bold ">Peserta Terbaru</h5>
+                        class="card-header bg-primary py-3 d-flex justify-content-between  align-items-center border-bottom-0">
+                        <h5 class="mb-0 fw-bold text-light">Peserta Terbaru</h5>
                         <a href="{{ route('admin.peserta.index') }}" class="btn btn-sm btn-light text-primary fw-bold">Lihat
                             Semua</a>
                     </div>

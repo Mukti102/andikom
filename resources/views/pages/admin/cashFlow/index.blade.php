@@ -15,50 +15,8 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header  border-0 pt-4 px-4 fw-bold">💰 Riwayat Pemasukan</div>
-                <div class="card-body p-0">
-                    <table class="table table-hover">
-                        <thead class=""><tr><th>Tanggal</th><th>Item</th><th class="text-end">Jumlah</th></tr></thead>
-                        <tbody>
-                            @foreach($pemasukan as $in)
-                            <tr><td>{{ $in->created_at->format('d M Y') }}</td><td>{{ $in->tagihan->pendaftaran->course->name_paket ?? 'Pembayaran' }}</td><td class="text-end text-success">+Rp {{ number_format($in->nominal, 0) }}</td></tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-header  border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                    <span class="fw-bold">📉 Riwayat Pengeluaran</span>
-                    <button class="btn btn-sm btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#addExpenseModal">+ Tambah</button>
-                </div>
-                <div class="card-body p-0">
-                    <table class="table table-hover">
-                        <thead><tr><th>Kategori</th><th>Tanggal</th><th class="text-end">Jumlah</th><th></th></tr></thead>
-                        <tbody>
-                            @foreach($pengeluaran as $out)
-                            <tr>
-                                <td>{{ $out->kategory }}</td>
-                                <td>{{ \Carbon\Carbon::parse($out->tanggal)->format('d M Y') }}</td>
-                                <td class="text-end text-danger">-Rp {{ number_format($out->jumlah, 0) }}</td>
-                                <td>
-                                    <form action="{{ route('cash.flow.destroy', $out->id) }}" method="POST" onsubmit="return confirm('Hapus data?')">
-                                        @csrf @method('DELETE')
-                                        <button class="btn btn-sm text-danger"><i class="bi bi-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+       <livewire:riwayat-pemasukan />
+       <livewire:riwayat-pengeluaran />
     </div>
 </div>
 

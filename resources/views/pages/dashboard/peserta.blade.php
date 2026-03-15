@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container py-4">
+    <div class="container">
         <div class="mb-4">
             <h2 class="fw-bold">Selamat Datang, {{ Auth::user()->name }}</h2>
             <p class="text-muted">Pantau progres belajar dan sertifikat Anda di sini.</p>
         </div>
 
-        <div class="row g-4">
+        {{-- <div class="row g-4">
             @foreach ($pendaftaranku as $item)
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm border-0 rounded-4">
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             @endforeach
-        </div>
+        </div> --}}
 
         <div class="row mt-5">
             <div class="col-12">

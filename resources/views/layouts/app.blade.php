@@ -8,9 +8,10 @@
 
     @stack('styles')
     @include('includes.styles')
+    @livewireStyles
 </head>
 
-<body>
+<body data-user-role="{{ auth()->user()->role }}">
     <script src="/assets/static/js/initTheme.js"></script>
     <div id="app">
         @include('partials.sidebar')
@@ -21,7 +22,6 @@
                     <i class="bi bi-justify fs-3"></i>
                 </a>
             </header>
-
             <div class="page-heading">
                 <h3>@yield('title')</h3>
             </div>
@@ -33,6 +33,7 @@
     </div>
     @include('includes.scripts')
     @stack('scripts')
+    @livewireScripts
 </body>
 
 </html>

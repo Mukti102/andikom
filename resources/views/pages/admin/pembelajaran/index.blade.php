@@ -47,7 +47,7 @@
                             {{-- Action Buttons --}}
                             <div class="mt-auto pt-3 border-top">
                                 <div class="row g-2">
-                                    @if (auth()->user()->isAdmin())
+                                    @if (auth()->user()->isAdmin() || auth()->user()->isTutor())
                                         <div class="col-12">
                                             <a href="{{ route('pembelajaran.peserta', $course->id) }}"
                                                class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center">

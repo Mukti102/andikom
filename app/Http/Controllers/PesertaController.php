@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PesertaRequest;
 use App\Models\Peserta;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,7 @@ class PesertaController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(PesertaRequest $request)
-    {   
+    {
         // Jika sampai di sini, artinya data sudah lolos validasi
         Peserta::create($request->validated());
 
@@ -66,6 +67,18 @@ class PesertaController extends Controller
         //
     }
 
+    public function exportPDF()
+    {   
+        // Mengambil semua data peserta
+        $peserta = Peserta::all();
+
+        // Memuat view 'pdf.daftar-peserta' dan mengirim data
+        $pdf = Pdf::loadView('export.peserta', ['peserta' => $peserta]);
+
+        // Mengunduh file
+        return $pdf->download('daftar-peserta-kursus.pdf');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -91,8 +104,8 @@ class PesertaController extends Controller
      */
     public function destroy($id)
     {
-            $peserta = Peserta::find($id);
-            $peserta->delete();
-            return redirect()->route('admin.peserta.index')->with('success','Berhasil Menghapus Peserta');
+        $peserta = Peserta::find($id);
+        $peserta->delete();
+        return redirect()->route('admin.peserta.index')->with('success', 'Berhasil Menghapus Peserta');
     }
 }
