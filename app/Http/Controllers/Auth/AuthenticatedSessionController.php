@@ -26,6 +26,19 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = Auth::user();
+
+        if ($user->role === 'user') {
+            if (!$user->peserta || $user->peserta->status_aktif == false) {
+
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('login')->with('error', 'Akun Anda belum aktif. Silakan tunggu konfirmasi admin.');
+            }
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

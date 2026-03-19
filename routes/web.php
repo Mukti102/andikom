@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnnouncmentController;
+use App\Http\Controllers\CertificateTemplateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
@@ -29,6 +30,7 @@ Route::get('/', function () {
 Route::middleware('auth', 'role:admin,owner')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('peserta', PesertaController::class)->except('update');
+    Route::patch('/peserta/{id}/verifikasi', [PesertaController::class, 'verifikasi'])->name('peserta.verifikasi');
     Route::get('/peserta-export', [PesertaController::class, 'exportPDF'])->name('peserta.export');
     Route::resource('courses', CourseController::class);
     Route::resource('tools', ToolController::class);
@@ -41,6 +43,12 @@ Route::middleware('auth', 'role:admin,owner')->prefix('admin')->name('admin.')->
     Route::get('/pengumuman', [AnnouncmentController::class, 'index'])->name('announcment.index');
     Route::post('/pengumuman', [AnnouncmentController::class, 'store'])->name('announcment.store');
     Route::delete('/pengumuman/{id}', [AnnouncmentController::class, 'destroy'])->name('announcment.destroy');
+
+    Route::get('/certificate-templates', [CertificateTemplateController::class, 'index'])->name('certificate-template.index');
+    Route::post('/certificate-templates', [CertificateTemplateController::class, 'store'])->name('certificate-template.store');
+    Route::get('/certificate-templates/{id}/builder', [CertificateTemplateController::class, 'builder'])->name('certificate-template.builder');
+    Route::post('/certificate-templates/{id}/builder/save', [CertificateTemplateController::class, 'save'])->name('certificate-template.builder.save');
+    Route::delete('/certificate-templates/{id}', [CertificateTemplateController::class, 'delete'])->name('certificate-template.delete');
 });
 
 
@@ -52,8 +60,6 @@ Route::middleware(['auth', 'role:tutor'])->group(function () {
     Route::post('/pembelajaran/{course_id}/materi/store', [MateriController::class, 'store'])->name('pembelajaran.materi.store');
     Route::put('/pembelajaran/{course_id}/materi/store', [MateriController::class, 'update'])->name('pembelajaran.materi.update');
     Route::delete('/pembelajaran/{id}/materi/destroy', [MateriController::class, 'destroy'])->name('pembelajaran.materi.destroy');
-    Route::post('/pembelajaran/nilai', [NilaiController::class, 'store'])->name('pembelajaran.nilai.store');
-    Route::get('/pembelajaran/sertifikat/{id}/cetak', [NilaiController::class, 'cetak'])->name('pembelajaran.nilai.sertifikat');
 });
 
 
@@ -69,6 +75,9 @@ Route::middleware(['auth', 'role:admin,owner'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('pendaftaran', PendaftaranController::class)->only('store');
+    Route::post('/pembelajaran/nilai', [NilaiController::class, 'store'])->name('pembelajaran.nilai.store');
+    Route::patch('/pembelajaran/certificate/{id}', [NilaiController::class, 'store_certificate'])->name('pembelajaran.nilai.store.certificate');
+
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

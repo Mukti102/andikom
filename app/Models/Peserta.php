@@ -41,4 +41,9 @@ class Peserta extends Model
     {
         return $this->hasMany(Pendaftaran::class, 'peserta_id');
     }
+
+    public function documents()
+    {
+        return $this->hasOne(Document::class, 'peserta_id');
+    }
 }

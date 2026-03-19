@@ -3,7 +3,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <h3 class="text-primary">{{$site_settings['site_name']}}</h3>
+                    <h3 class="text-primary">{{ $site_settings['site_name'] }}</h3>
                 </div>
                 {{-- Theme Toggle --}}
                 {{-- <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
@@ -82,18 +82,14 @@
                             <span>Daftar Kursus</span>
                         </a>
                     </li>
+                    
                     <li class="sidebar-item {{ isActive('admin.jadwal.*') }}">
                         <a href="{{ route('admin.jadwal.index') }}" class="sidebar-link">
                             <i class="bi bi-calendar3"></i>
                             <span>Jadwal Kelas</span>
                         </a>
                     </li>
-                    <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
-                        <a href="{{ route('pembelajaran.index') }}" class="sidebar-link">
-                            <i class="bi bi-mortarboard-fill"></i>
-                            <span>Materi & Nilai</span>
-                        </a>
-                    </li>
+
 
 
                     <li class="sidebar-item {{ isActive('admin.announcment.*') }}">
@@ -130,12 +126,18 @@
                             <span>Kursus Saya</span>
                         </a>
                     </li>
+                    <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
+                        <a href="{{ route('pembelajaran.index') }}" class="sidebar-link">
+                            <i class="bi bi-mortarboard-fill"></i>
+                            <span>Materi & Nilai</span>
+                        </a>
+                    </li>
                 @endif
 
                 {{-- tutor Section --}}
                 @if (auth()->user()->isTutor())
                     <li class="sidebar-title">Pembelajaran</li>
-                      <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
+                    <li class="sidebar-item {{ isActive('pembelajaran.*') }}">
                         <a href="{{ route('pembelajaran.index') }}" class="sidebar-link">
                             <i class="bi bi-mortarboard-fill"></i>
                             <span>Materi & Nilai</span>

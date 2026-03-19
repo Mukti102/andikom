@@ -47,6 +47,10 @@ class PesertaRequest extends FormRequest
             'hp_orang_tua'          => 'required|string|max:20',
             'status_tempat_tinggal' => 'required|string|max:100',
 
+            'kartu_keluarga' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+            'ktp-akte'       => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+            'pas-photo'      => 'required|image|mimes:jpg,jpeg,png|max:1024',
+
             'status_aktif'          => 'nullable|boolean'
         ];
     }
@@ -54,12 +58,45 @@ class PesertaRequest extends FormRequest
     /**
      * Custom error messages (Opsional).
      */
+    /**
+     * Custom error messages.
+     */
     public function messages(): array
     {
         return [
-            'nis.unique' => 'Nomor Induk Siswa (NIS) sudah terdaftar.',
-            'user_id.required' => 'Wajib memilih akun user untuk profil ini.',
-            'jenis_kelamin.in' => 'Pilihan jenis kelamin tidak valid.',
+            // Identitas Dasar
+            'user_id.required'       => 'Pilih akun pengguna terlebih dahulu.',
+            'user_id.exists'         => 'Akun pengguna yang dipilih tidak terdaftar.',
+            'nis.required'           => 'Nomor Induk Siswa (NIS) wajib diisi.',
+            'nis.unique'             => 'Nomor Induk Siswa (NIS) sudah terdaftar.',
+            'nama_lengkap.required'  => 'Nama lengkap wajib diisi sesuai identitas.',
+            'tempat_lahir.required'  => 'Tempat lahir wajib diisi.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'jenis_kelamin.required' => 'Silakan pilih jenis kelamin.',
+            'jenis_kelamin.in'       => 'Pilihan jenis kelamin tidak valid.',
+            'agama.required'         => 'Agama wajib diisi.',
+            'no_hp.required'         => 'Nomor HP aktif wajib diisi.',
+            'alamat_sekarang.required' => 'Alamat domisili saat ini wajib diisi.',
+
+            // Data Keluarga
+            'nama_ayah.required'     => 'Nama ayah wajib diisi.',
+            'nama_ibu.required'      => 'Nama ibu wajib diisi.',
+            'hp_orang_tua.required'  => 'Nomor HP orang tua wajib diisi.',
+            'status_tempat_tinggal.required' => 'Status tempat tinggal wajib diisi.',
+
+            // Validasi Dokumen (File)
+            'kartu_keluarga.required' => 'File Kartu Keluarga wajib diunggah.',
+            'kartu_keluarga.mimes'    => 'Kartu Keluarga harus berupa format: jpg, jpeg, png, atau pdf.',
+            'kartu_keluarga.max'      => 'Ukuran Kartu Keluarga maksimal adalah 2MB.',
+
+            'ktp-akte.required'       => 'File KTP atau Akte Kelahiran wajib diunggah.',
+            'ktp-akte.mimes'          => 'Format KTP/Akte harus: jpg, jpeg, png, atau pdf.',
+            'ktp-akte.max'            => 'Ukuran file KTP/Akte maksimal 2MB.',
+
+            'pas-photo.required'      => 'Pas Photo wajib diunggah.',
+            'pas-photo.image'         => 'File harus berupa gambar.',
+            'pas-photo.mimes'         => 'Format foto harus: jpg, jpeg, atau png.',
+            'pas-photo.max'           => 'Ukuran foto terlalu besar, maksimal 1MB.',
         ];
     }
 }

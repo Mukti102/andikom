@@ -2,7 +2,7 @@
 @section('title', 'Edit Peserta: ' . $peserta->nama_lengkap)
 
 @section('content')
- @if ($errors->any())
+    @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('peserta.update', $peserta->id) }}" method="POST">
+    <form action="{{ route('peserta.update', $peserta->id) }}" enctype="multipart/form-data" method="POST">
         @csrf
         @method('PUT')
 
@@ -38,7 +38,7 @@
                             'Khonghucu' => 'Khonghucu',
                         ]" />
                         <div class="row">
-                            
+
                             <div class="col-md-6">
                                 <x-form-input label="Tempat Lahir" name="tempat_lahir" :value="$peserta->tempat_lahir" required />
                             </div>
@@ -50,6 +50,16 @@
 
                         <x-form-select label="Jenis Kelamin" name="jenis_kelamin" required :options="['L' => 'Laki-laki', 'P' => 'Perempuan']"
                             :selected="$peserta->jenis_kelamin" />
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-geo-alt me-2"></i>Dokumen Berkas</h5>
+                    </div>
+                    <div class="card-body">
+                        <x-form-input label="Foto Copy KK (1 Lembar)" type="file" name="kartu_keluarga" required />
+                        <x-form-input label="Foto Copy KTP/Akte (1 Lembar)" type="file" name="ktp-akte" required />
+                        <x-form-input label="Pas Foto Warna 3x4 (1 Lembar)" type="file" name="pas-photo" required />
                     </div>
                 </div>
             </div>
@@ -71,7 +81,7 @@
                             @enderror
                         </div>
 
-                         <x-form-select label="Status Tempat Tinggal" name="status_tempat_tinggal" required
+                        <x-form-select label="Status Tempat Tinggal" name="status_tempat_tinggal" required
                             :options="['Ikut Orang Tua' => 'Ikut Orang Tua', 'Saudara' => 'Saudara', 'Kost' => 'Kost']" />
 
                         <x-form-select label="Status Aktif" name="status_aktif" required :options="['1' => 'Aktif', '0' => 'Non-Aktif']"

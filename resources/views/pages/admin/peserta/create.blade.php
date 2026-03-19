@@ -11,7 +11,7 @@
             </ul>
         </div>
     @endif
-    <form action="{{ route('admin.peserta.store') }}" method="POST">
+    <form action="{{ route('admin.peserta.store') }}" enctype="multipart/form-data" method="POST">
         @csrf
         <div class="row">
             <div class="col-md-6">
@@ -64,6 +64,16 @@
                         </div>
                         <x-form-select label="Status Tempat Tinggal" name="status_tempat_tinggal" required
                             :options="['Ikut Orang Tua' => 'Ikut Orang Tua', 'Saudara' => 'Saudara', 'Kost' => 'Kost']" />
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-geo-alt me-2"></i>Dokumen Berkas</h5>
+                    </div>
+                    <div class="card-body">
+                        <x-form-input label="Foto Copy KK (1 Lembar)" type="file" name="kartu_keluarga" required />
+                        <x-form-input label="Foto Copy KTP/Akte (1 Lembar)" type="file" name="ktp-akte" required />
+                        <x-form-input label="Pas Foto Warna 3x4 (1 Lembar)" type="file" name="pas-photo" required />
                     </div>
                 </div>
             </div>

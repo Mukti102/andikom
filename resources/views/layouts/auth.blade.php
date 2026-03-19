@@ -272,7 +272,56 @@
 
 <body>
     <div class="page-wrapper">
+
         <div class="card">
+            <div class="max-w-7xl mx-auto px-4 mt-4">
+                @if (session('success'))
+                    <div class="flex items-center p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 rounded-lg shadow-sm"
+                        role="alert">
+                        <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <div class="ml-3 text-sm font-medium">
+                            {{ session('success') }}
+                        </div>
+                        <button type="button"
+                            class="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex h-8 w-8"
+                            onclick="this.parentElement.remove()" aria-label="Close">
+                            <span class="sr-only">Dismiss</span>
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="flex items-center p-4 mb-4 text-red-800 border-t-4 border-red-300 bg-red-50 rounded-lg shadow-sm"
+                        role="alert">
+                        <svg class="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <div class="ml-3 text-sm font-medium">
+                            {{ session('error') }}
+                        </div>
+                        <button type="button"
+                            class="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex h-8 w-8"
+                            onclick="this.parentElement.remove()" aria-label="Close">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                @endif
+            </div>
 
             {{-- Header --}}
             <div class="card-header">

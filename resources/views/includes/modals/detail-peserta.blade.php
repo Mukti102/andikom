@@ -1,5 +1,6 @@
 <div class="modal fade" id="detailModal{{ $pendaftaran->id }}" tabindex="-1">
-    <div class="modal-dialog modal-lg"> <div class="modal-content">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Detail Peserta: {{ $pendaftaran->peserta->nama_lengkap }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -11,8 +12,10 @@
                         <hr>
                         <p><strong>NIS:</strong> {{ $pendaftaran->peserta->nis }}</p>
                         <p><strong>Nama Panggilan:</strong> {{ $pendaftaran->peserta->nama_panggilan ?? '-' }}</p>
-                        <p><strong>TTL:</strong> {{ $pendaftaran->peserta->tempat_lahir }}, {{ $pendaftaran->peserta->tanggal_lahir }}</p>
-                        <p><strong>Gender:</strong> {{ $pendaftaran->peserta->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
+                        <p><strong>TTL:</strong> {{ $pendaftaran->peserta->tempat_lahir }},
+                            {{ $pendaftaran->peserta->tanggal_lahir }}</p>
+                        <p><strong>Gender:</strong>
+                            {{ $pendaftaran->peserta->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
                         <p><strong>Agama:</strong> {{ $pendaftaran->peserta->agama }}</p>
                         <p><strong>Alamat:</strong> {{ $pendaftaran->peserta->alamat_sekarang }}</p>
                     </div>
@@ -25,6 +28,10 @@
                         <p><strong>Status Tinggal:</strong> {{ $pendaftaran->peserta->status_tempat_tinggal }}</p>
                         <p><strong>No HP Siswa:</strong> {{ $pendaftaran->peserta->no_hp }}</p>
                         <p><strong>Asal Sekolah:</strong> {{ $pendaftaran->peserta->asal_sekolah ?? '-' }}</p>
+                        <div>
+                            <p>Foto Profil</p>
+                            <img width="100" src="{{ asset('storage/' . $pendaftaran->peserta->user->avatar) }}" alt="">
+                        </div>
                     </div>
                 </div>
             </div>
