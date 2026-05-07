@@ -30,6 +30,18 @@
                                         <i class="fas fa-share-alt me-1"></i> Sosial Media
                                     </button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link fw-semibold" id="biaya-tab" data-bs-toggle="tab"
+                                        data-bs-target="#biaya" type="button" role="tab">
+                                        <i class="fas fa-cash-register me-1"></i> Biaya
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link fw-semibold" id="bank_account-tab" data-bs-toggle="tab"
+                                        data-bs-target="#bank_account" type="button" role="tab">
+                                        <i class="fas fa-credit-card me-1"></i> Bank Account
+                                    </button>
+                                </li>
                             </ul>
                         </div>
 
@@ -112,6 +124,74 @@
                                                     <input type="text" name="facebook_url" class="form-control"
                                                         value="{{ $settings['facebook_url'] ?? '' }}">
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Tab biaya --}}
+                                <div class="tab-pane fade" id="biaya" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Biaya Pendaftaran</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light">Rp</span>
+                                                    <input type="text" name="register_fee" class="form-control"
+                                                        value="{{ $settings['register_fee'] ?? '' }}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Biaya Sertifikat</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light">Rp</span>
+                                                    <input type="text" name="sertifikat_fee" class="form-control"
+                                                        value="{{ $settings['sertifikat_fee'] ?? '' }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Tab bank --}}
+                                <div class="tab-pane fade" id="bank_account" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Nama Bank</label>
+                                                <div class="input-group">
+                                                    <input placeholder="Contoh : BNI , BRI , BCA" type="text"
+                                                        name="bank_name" class="form-control"
+                                                        value="{{ $settings['bank_name'] ?? '' }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Nomor Rekening</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="nomor_rekening" class="form-control"
+                                                        value="{{ $settings['nomor_rekening'] ?? '' }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">Atas Nama</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="account_holder" class="form-control"
+                                                        value="{{ $settings['account_holder'] ?? '' }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Logo Bank</label>
+                                                @if (!empty($settings['bank_logo']))
+                                                    <div class="mb-2">
+                                                        <img src="{{ asset('storage/' . $settings['bank_logo']) }}"
+                                                            width="150" class="img-thumbnail">
+                                                    </div>
+                                                @endif
+                                                <input type="file" name="bank_logo" class="form-control">
+                                                <small class="text-muted">Format: PNG, JPG, WebP (Max: 2MB)</small>
                                             </div>
                                         </div>
                                     </div>

@@ -165,45 +165,74 @@
 
     <div class="modal fade" id="modalBayar" tabindex="-1" aria-labelledby="modalBayarLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Konfirmasi Pembayaran</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold">Konfirmasi Pembayaran</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.pembayaran.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('pembayaran.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="modal-body">
-                        <input type="hidden" name="tagihan_id" id="modal_tagihan_id">
+                    <div class="modal-body p-4">
 
-                        <div class="mb-3">
-                            <label class="form-label">Angsuran Ke</label>
-                            <input type="text" name="angsuran_ke" id="modal_angsuran_ke" class="form-control"
-                                readonly>
+                        {{-- Alert Informasi Rekening --}}
+                        <div class="alert alert-info border-0 shadow-sm mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                                @if (!empty($site_settings['bank_logo']))
+                                    <img src="{{ asset('storage/' . $site_settings['bank_logo']) }}" alt="Logo Bank"
+                                        class="me-2" style="height: 25px;">
+                                @endif
+                                <h6 class="mb-0 fw-bold">Transfer Pembayaran:</h6>
+                            </div>
+                            <div class="ps-1">
+                                <p class="mb-1 small">Silahkan transfer ke rekening berikut:</p>
+                                <div class="bg-white p-2 rounded border border-info-subtle">
+                                    <span
+                                        class="d-block fw-bold text-dark">{{ $site_settings['bank_name'] ?? 'Bank Belum Diatur' }}</span>
+                                    <span class="d-block text-primary fw-bold"
+                                        style="font-size: 1.1rem;">{{ $site_settings['nomor_rekening'] ?? '-' }}</span>
+                                    <span class="d-block small text-muted">A.N.
+                                        {{ $site_settings['account_holder'] ?? '-' }}</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Nominal Harus Dibayar</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Rp</span>
-                                <input type="number" name="nominal" id="modal_nominal" class="form-control" readonly>
+                        <input type="hidden" name="tagihan_id" id="modal_tagihan_id">
+
+                        <div class="row g-3">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold small">Angsuran Ke</label>
+                                <input type="text" name="angsuran_ke" id="modal_angsuran_ke"
+                                    class="form-control bg-light" readonly>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold small">Nominal Bayar</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">Rp</span>
+                                    <input type="number" name="nominal" id="modal_nominal"
+                                        class="form-control bg-light" readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Tanggal Bayar</label>
+                            <label class="form-label fw-bold small">Tanggal Bayar</label>
                             <input type="date" name="tanggal_bayar" class="form-control" value="{{ date('Y-m-d') }}"
                                 required>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Upload Bukti Bayar</label>
+                            <label class="form-label fw-bold small">Upload Bukti Bayar</label>
                             <input type="file" name="bukti_bayar" class="form-control" accept="image/*" required>
-                            <small class="text-muted">Format: JPG, PNG, Max 2MB</small>
+                            <div class="form-text mt-1" style="font-size: 0.75rem;">
+                                <i class="fas fa-info-circle me-1"></i> Format: JPG, PNG, Max 2MB
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Kirim Pembayaran</button>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success px-4 fw-bold shadow-sm">Kirim Pembayaran</button>
                     </div>
                 </form>
             </div>
@@ -213,25 +242,29 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const modalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
+        const modalBayar = new bootstrap.Modal(document.getElementById('modalBayar'));
 
-            document.querySelectorAll('.btn-bayar').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Ambil data dari atribut tombol
-                    const id = this.getAttribute('data-id');
-                    const angsuran = this.getAttribute('data-angsuran');
-                    const nominal = this.getAttribute('data-nominal');
+        document.querySelectorAll('.btn-bayar').forEach(button => {
+            button.addEventListener('click', function() {
 
-                    // Isi ke dalam input modal
-                    document.getElementById('modal_tagihan_id').value = id;
-                    document.getElementById('modal_angsuran_ke').value = angsuran;
-                    document.getElementById('modal_nominal').value = nominal;
+                // Ambil data dari atribut tombol
+                const id = this.getAttribute('data-id');
+                const angsuran = this.getAttribute('data-angsuran');
+                const nominal = this.getAttribute('data-nominal');
 
-                    // Tampilkan modal
-                    modalBayar.show();
-                });
+                // Format nominal ke Rupiah
+                const nominalFormat = new Intl.NumberFormat('id-ID').format(nominal);
+
+                // Isi ke dalam input modal
+                document.getElementById('modal_tagihan_id').value = id;
+                document.getElementById('modal_angsuran_ke').value = angsuran;
+                document.getElementById('modal_nominal').value = nominalFormat;
+
+                // Tampilkan modal
+                modalBayar.show();
             });
         });
+    });
 
 
         const modalElement = document.getElementById('modalVerifikasi');

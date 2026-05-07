@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendWaNotification;
 use App\Mail\CertificateUploadedMail;
 use App\Models\CertificateTemplate;
 use App\Models\Course;
@@ -82,6 +83,10 @@ class NilaiController extends Controller
         $user = $nilai->pendaftaran->peserta->user;
         if ($user && $user->email) {
             Mail::to($user->email)->queue(new CertificateUploadedMail($nilai));
+
+            // Kirim WA ke peserta
+            $message = "Selamat! Sertifikat Pelatihan Anda Telah Tersedia.\nNomor Sertifikat: {$nilai->nomor_sertifikat}\nSilakan cek email Anda untuk mengunduh sertifikat.";
+            dispatch(new SendWaNotification($user->phone, $message));
         }
 
         return redirect()->back()->with('success', 'Berhasil mengupload sertifikat untuk ' . $nilai->pendaftaran->peserta->nama_lengkap);

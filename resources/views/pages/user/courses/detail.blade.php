@@ -2,6 +2,15 @@
 @section('title', $course->name_paket)
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container py-5">
         <div class="row g-4">
             {{-- Sidebar: Info Pembayaran & CTA --}}
@@ -87,12 +96,18 @@
                                     'value' => $course->jumlah_pertemuan . ' Sesi',
                                     'icon' => 'chalkboard-teacher',
                                 ],
+                                // --- ADDED NEW FEES HERE ---
                                 [
-                                    'label' => 'Intensitas',
-                                    'value' => $course->pertemuan_per_minggu . 'x / Minggu',
-                                    'icon' => 'history',
+                                    'label' => 'Biaya Daftar',
+                                    'value' => 'Rp ' . number_format($site_settings['register_fee'] ?? 0, 0, ',', '.'),
+                                    'icon' => 'user-plus',
                                 ],
-                                ['label' => 'Total Jam', 'value' => $course->durasi_jam . ' Jam', 'icon' => 'clock'],
+                                [
+                                    'label' => 'Biaya Sertifikat',
+                                    'value' =>
+                                        'Rp ' . number_format($site_settings['sertifikat_fee'] ?? 0, 0, ',', '.'),
+                                    'icon' => 'certificate',
+                                ],
                             ];
                         @endphp
 
@@ -127,10 +142,47 @@
                         {{-- Hidden Field: Course & Peserta --}}
                         <input type="hidden" name="course_id" value="{{ $course->id }}">
                         <input type="hidden" name="peserta_id" value="{{ $peserta->id ?? '' }}">
+                        <input type="hidden" name="status" value="nonaktif">
 
                         <div class="text-center mb-4">
                             <p class="mb-1 text-muted">Anda akan mendaftar pada paket:</p>
                             <h5 class="fw-bold text-primary">{{ $course->name_paket }}</h5>
+                        </div>
+
+                        {{-- Section Rincian Biaya --}}
+                        <div class="card bg-light border-0 mb-4">
+                            <div class="card-body p-3">
+                                <h6 class="fw-bold mb-3"
+                                    style="font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">Rincian
+                                    Biaya</h6>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small">Biaya Pelatihan</span>
+                                    <span class="fw-medium small">{{ $course->formatted_price }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small">Biaya Pendaftaran</span>
+                                    <span class="fw-medium small text-danger">+ Rp
+                                        {{ number_format($site_settings['register_fee'] ?? 0, 0, ',', '.') }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small">Biaya Sertifikat</span>
+                                    <span class="fw-medium small text-danger">+ Rp
+                                        {{ number_format($site_settings['sertifikat_fee'] ?? 0, 0, ',', '.') }}</span>
+                                </div>
+
+                                <hr class="my-2 opacity-25">
+
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-bold small">Total Estimasi</span>
+                                    <span class="fw-bold text-primary">
+                                        Rp
+                                        {{ number_format(($course->jumlah_total ?? 0) + ($site_settings['register_fee'] ?? 0) + ($site_settings['sertifikat_fee'] ?? 0), 0, ',', '.') }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -149,12 +201,12 @@
                             </div>
                         </div>
 
-                        {{-- Tanggal otomatis disembunyikan atau dibuat readonly agar tidak dimanipulasi user --}}
                         <input type="hidden" name="tanggal_daftar" value="{{ date('Y-m-d') }}">
                         <input type="hidden" name="status" value="aktif">
 
                         <p class="text-muted x-small mt-3 mb-0">
-                            *Dengan mengklik tombol simpan, Anda setuju dengan syarat dan ketentuan pelatihan kami.
+                            <i class="fas fa-info-circle me-1"></i> Dengan mengklik tombol konfirmasi, Anda setuju dengan
+                            syarat dan ketentuan pelatihan kami.
                         </p>
                     </div>
                     <div class="modal-footer border-0 p-4 pt-0">
@@ -164,5 +216,6 @@
                 </form>
             </div>
         </div>
+    </div>
     </div>
 @endsection

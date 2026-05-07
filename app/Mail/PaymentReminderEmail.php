@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Tagihan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,9 +17,12 @@ class PaymentReminderEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+
+    public $tagihan;
+
+    public function __construct(Tagihan $tagihan)
     {
-        //
+        $this->tagihan = $tagihan;
     }
 
     /**
@@ -37,7 +41,7 @@ class PaymentReminderEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'email.payment_reminder',
         );
     }
 

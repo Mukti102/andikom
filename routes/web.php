@@ -37,7 +37,6 @@ Route::middleware('auth', 'role:admin,owner')->prefix('admin')->name('admin.')->
     Route::get('/courses/{id}/pendaftar', [CourseController::class, 'pendaftar'])->name('course.pendaftar');
     Route::resource('pendaftaran', PendaftaranController::class)->except('store');
     Route::get('/tagihan/{id}', [PendaftaranController::class, 'tagihan'])->name('tagihans');
-    Route::resource('pembayaran', PembayaranController::class);
     Route::put('/pembayaran/verifikasi/{id}', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
     Route::resource('jadwal', JadwalController::class);
     Route::get('/pengumuman', [AnnouncmentController::class, 'index'])->name('announcment.index');
@@ -77,6 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('pendaftaran', PendaftaranController::class)->only('store');
     Route::post('/pembelajaran/nilai', [NilaiController::class, 'store'])->name('pembelajaran.nilai.store');
     Route::patch('/pembelajaran/certificate/{id}', [NilaiController::class, 'store_certificate'])->name('pembelajaran.nilai.store.certificate');
+
+
+    Route::resource('pembayaran', PembayaranController::class);
 
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

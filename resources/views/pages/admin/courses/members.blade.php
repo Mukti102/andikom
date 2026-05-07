@@ -53,7 +53,7 @@
                                 </td>
                                 <td>
                                     @php
-                                        $totalBiaya = $p->course->jumlah_total;
+                                        $totalBiaya = $p->tagihans->sum('nominal');
                                         // Hitung total nominal tagihan yang sudah statusnya 'paid'
                                         $totalTerbayar = $p->tagihans->where('status', 'paid')->sum('nominal');
                                         $persentase = $totalBiaya > 0 ? ($totalTerbayar / $totalBiaya) * 100 : 0;
@@ -137,7 +137,7 @@
 
         // Fungsi buka modal Tambah
         document.querySelector('.btn-tambah').addEventListener('click', () => {
-            form.action = "{{ route('pendaftaran.store') }}";
+            form.action = "";
             document.getElementById('methodField').innerHTML = ''; // Reset method
             document.getElementById('modalTitle').innerText = 'Tambah Pendaftaran';
             modal.show();

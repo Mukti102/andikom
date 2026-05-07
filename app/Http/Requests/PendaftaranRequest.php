@@ -14,52 +14,49 @@ class PendaftaranRequest extends FormRequest
     }
 
     public function rules(): array
-    {
-        return [
-            'peserta_id'     => 'required|exists:peserta,id',
-            'tanggal_daftar' => 'required',
-            'metode_bayar'   => 'required|in:lunas,cicil',
-            'status'         => 'required|in:aktif,nonaktif',
-            'course_id'      => [
-                'required',
-                'exists:courses,id',
-                function ($attribute, $value, $fail) {
-                    $kursus = Course::find($value);
-                    
-                    // Mendapatkan ID pendaftaran yang sedang diedit (jika ada)
-                    // Pastikan route parameter Anda bernama 'pendaftaran'
-                    $currentId = $this->route('pendaftaran');
+{
+    return [
+        'peserta_id'     => 'required|exists:peserta,id',
+        'tanggal_daftar' => 'required|date',
+        'metode_bayar'   => 'required|in:lunas,cicil',
+        'status'         => 'required|in:aktif,nonaktif',
+        'course_id'      => [
+            'required',
+            'exists:courses,id',
+            function ($attribute, $value, $fail) {
+                $kursus = \App\Models\Course::find($value);
+                if (!$kursus) return;
 
-                    // 1. CEK DUPLIKASI: Apakah peserta sudah terdaftar di kursus yang sama & aktif?
-                    $queryCekDuplikat = Pendaftaran::where('course_id', $value)
-                        ->where('peserta_id', $this->peserta_id)
-                        ->where('status', 'aktif');
+                // Mendapatkan ID dari route (untuk handle update)
+                // Jika route Anda: /pendaftaran/{id}, maka gunakan 'id' atau 'pendaftaran'
+                $currentId = $this->route('pendaftaran') ?? $this->route('id');
 
-                    // Abaikan data milik sendiri saat proses update
-                    if ($currentId) {
-                        $queryCekDuplikat->where('id', '!=', $currentId);
-                    }
+                // 1. CEK DUPLIKASI
+                $sudahDaftar = \App\Models\Pendaftaran::where('course_id', $value)
+                    ->where('peserta_id', $this->peserta_id)
+                    ->where('status', 'aktif')
+                    ->when($currentId, function ($q) use ($currentId) {
+                        return $q->where('id', '!=', $currentId);
+                    })
+                    ->exists();
 
-                    if ($queryCekDuplikat->exists()) {
-                        $fail('Peserta ini sudah terdaftar di kursus "' . ($kursus->name_paket ?? 'tersebut') . '" dengan status aktif.');
-                    }
+                if ($sudahDaftar) {
+                    $fail('Peserta ini sudah terdaftar aktif di kursus ini.');
+                }
 
-                    // 2. CEK KUOTA: Apakah slot kursus masih tersedia?
-                    $queryCekKuota = Pendaftaran::where('course_id', $value)
-                        ->where('status', 'aktif');
+                // 2. CEK KUOTA
+                $pendaftarAktif = \App\Models\Pendaftaran::where('course_id', $value)
+                    ->where('status', 'aktif')
+                    ->when($currentId, function ($q) use ($currentId) {
+                        return $q->where('id', '!=', $currentId);
+                    })
+                    ->count();
 
-                    // Abaikan data milik sendiri saat update, agar kuota tidak double count
-                    if ($currentId) {
-                        $queryCekKuota->where('id', '!=', $currentId);
-                    }
-
-                    $pendaftarAktif = $queryCekKuota->count();
-
-                    if ($kursus && $pendaftarAktif >= $kursus->max_slot) {
-                        $fail('Maaf, slot untuk kursus "' . $kursus->name_paket . '" sudah penuh (' . $pendaftarAktif . '/' . $kursus->max_slot . ').');
-                    }
-                },
-            ],
-        ];
-    }
+                if ($pendaftarAktif >= $kursus->max_slot) {
+                    $fail('Maaf, slot untuk kursus "' . $kursus->name_paket . '" sudah penuh.');
+                }
+            },
+        ],
+    ];
+}
 }

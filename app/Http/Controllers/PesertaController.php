@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PesertaRequest;
+use App\Jobs\SendWaNotification;
 use App\Mail\PesertaTerverifikasiMail;
 use App\Models\Peserta;
 use App\Models\User;
@@ -68,6 +69,10 @@ class PesertaController extends Controller
             $peserta->update(['status_aktif' => true]);
 
             Mail::to($peserta->user->email)->queue(new PesertaTerverifikasiMail($peserta));
+
+                // Kirim WA ke peserta
+                $message = "Selamat! Pendaftaran Anda Telah Diverifikasi. Status Anda Kini Aktif , anda sudah bisa login  .\nSilakan cek email Anda untuk informasi lebih lanjut.";
+                dispatch(new SendWaNotification($peserta->user->phone, $message));
 
             return redirect()->back()->with('success', 'Peserta berhasil dikonfirmasi dan status kini Aktif.');
         } catch (\Exception $e) {

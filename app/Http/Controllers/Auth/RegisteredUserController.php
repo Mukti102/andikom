@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendWaNotification;
 use App\Mail\AdminNotificationMail;
 use App\Models\Peserta;
 use App\Models\User;
@@ -76,7 +77,7 @@ class RegisteredUserController extends Controller
                     ->merge(['user_id' => $user->id, 'status_aktif' => false])
                     ->toArray();
 
-              
+
 
                 $peserta = Peserta::create($pesertaData);
 
@@ -89,6 +90,10 @@ class RegisteredUserController extends Controller
                 $admins = User::where('role', 'admin')->get();
                 foreach ($admins as $admin) {
                     Mail::to($admin)->queue(new AdminNotificationMail($peserta));
+
+                    // Kirim WA ke admin
+                    $message = "Pendaftaran Peserta Baru:\nNama: {$peserta->nama_lengkap}\nEmail: {$user->email}\nNIS: {$peserta->nis} \nSilakan cek dashboard admin untuk detail dan konfirmasi.";
+                    dispatch(new SendWaNotification($admin->phone, $message));
                 }
             });
 

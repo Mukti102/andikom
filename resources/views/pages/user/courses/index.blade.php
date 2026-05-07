@@ -31,11 +31,12 @@
 
                                 <td>
                                     @php
-                                        $totalBiaya = $course->jumlah_total;
+
                                         $pendaftaran = $course->pendaftarans
                                             ->where('peserta_id', $user->peserta->id)
                                             ->first();
-                                        // Hitung total nominal tagihan yang sudah statusnya 'paid'
+                                        $totalBiaya = $pendaftaran->tagihans
+                                            ->sum('nominal');
                                         $totalTerbayar = $pendaftaran->tagihans
                                             ->where('status', 'paid')
                                             ->sum('nominal');

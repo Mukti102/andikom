@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PembayaranRequest;
+use App\Jobs\SendWaNotification;
 use App\Mail\PaymentEmail;
 use App\Mail\VerifiedPaymentEmail;
 use App\Models\Pembayaran;
@@ -59,6 +60,9 @@ class PembayaranController extends Controller
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
                 Mail::to($admin->email)->queue(new PaymentEmail($pembayaran));
+                // Kirim WA ke admin
+                $message = "Pembayaran Baru:\nTagihan ID: {$pembayaran->tagihan_id}\nNominal: {$pembayaran->nominal}\nTanggal Bayar: {$pembayaran->tanggal_bayar}\nStatus: Pending\nSilakan cek dashboard admin untuk verifikasi.";
+                dispatch(new SendWaNotification($admin->phone, $message));  
             }
 
             DB::commit();
@@ -104,6 +108,10 @@ class PembayaranController extends Controller
             $emailTujuan = $pembayaran->tagihan->pendaftaran->peserta->user->email;
 
             Mail::to($emailTujuan)->queue(new VerifiedPaymentEmail($pembayaran));
+
+                // Kirim WA ke peserta
+                $message = "Pembayaran Anda Telah Diverifikasi.\nTagihan ID: {$pembayaran->tagihan_id}\nNominal: {$pembayaran->nominal}\nTanggal Bayar: {$pembayaran->tanggal_bayar}\nStatus: " . ucfirst($pembayaran->status_verifikasi) . "\nSilakan cek email Anda untuk informasi lebih lanjut.";
+                dispatch(new SendWaNotification($pembayaran->tagihan->pendaftaran->peserta->user->phone, $message));
 
             return redirect()->back()->with('success', 'Status verifikasi berhasil diperbarui.');
         } catch (\Exception $e) {

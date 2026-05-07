@@ -6,6 +6,7 @@ use App\Http\Requests\PendaftaranRequest;
 use App\Models\Course;
 use App\Models\Pendaftaran;
 use App\Models\Peserta;
+use App\Models\Setting;
 use App\Models\Tagihan;
 use Exception;
 use Illuminate\Http\Request;
@@ -36,9 +37,18 @@ class PendaftaranController extends Controller
      */
     public function store(PendaftaranRequest $request)
     {
+
+
         $pendaftaran = Pendaftaran::create($request->validated());
         $course = $pendaftaran->course;
-        $totalBiaya = $course->jumlah_total;
+        $settings = Setting::pluck('value', 'key')->toArray();
+        $registerFee = (int) ($settings['register_fee'] ?? 0);
+        $sertifikatFee = (int) ($settings['sertifikat_fee'] ?? 0);
+
+        $totalBiaya = $course->jumlah_total + $registerFee + $sertifikatFee;
+
+
+
 
         if ($pendaftaran->metode_bayar == 'cicil') {
             $jumlahMinggu = $course->jumlah_pertemuan ?: ($course->durasi_bulan * 4);
@@ -68,7 +78,7 @@ class PendaftaranController extends Controller
 
 
 
-        return redirect()->route('admin.pendaftaran.index')
+        return redirect()->back()
             ->with('success', 'Pendaftaran & tagihan berhasil dibuat!');
     }
 

@@ -124,39 +124,69 @@
                         <h5 class="modal-title">Rincian Nilai: {{ $pendaftaran->peserta->nama_lengkap }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="text-center mb-4">
-                            <small class="text-muted d-block">Nomor Sertifikat</small>
-                            <h6 class="fw-bold">{{ $pendaftaran->nilai->nomor_sertifikat ?? 'Belum Terbit' }}</h6>
-                        </div>
+                <div class="modal-body">
+    <div class="text-center mb-4">
+        <small class="text-muted d-block">Nomor Sertifikat</small>
+        <h6 class="fw-bold text-rose-600">{{ $pendaftaran->nilai->nomor_sertifikat ?? 'Belum Terbit' }}</h6>
+    </div>
 
-                        <ul class="list-group list-group-flush">
-                            @foreach ($course->tools as $tool)
-                                @php
-                                    $detail = $pendaftaran->nilai
-                                        ? $pendaftaran->nilai->details->where('tool_id', $tool->id)->first()
-                                        : null;
-                                    $skor = $detail->skor ?? 0;
-                                @endphp
-                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                                    <span>{{ $tool->name }}</span>
-                                    <span class="fw-bold {{ $skor >= 75 ? 'text-success' : 'text-danger' }}">
-                                        {{ $detail ? $skor : '-' }}
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
+    <div class="d-flex justify-content-between align-items-center px-0 mb-2 pb-2 border-bottom text-muted" style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+        <span style="width: 30px;">No</span>
+        <span class="flex-grow-1 ms-3">Nama Materi</span>
+        <span class="text-center" style="width: 60px;">Nilai</span>
+        <span class="text-end" style="width: 100px;">Predikat</span>
+    </div>
 
-                        <hr>
+    <ul class="list-group list-group-flush">
+        @foreach ($course->tools as $tool)
+            @php
+                $detail = $pendaftaran->nilai
+                    ? $pendaftaran->nilai->details->where('tool_id', $tool->id)->first()
+                    : null;
+                $skor = $detail->skor ?? 0;
 
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-bold">Rata-rata:</span>
-                            @php
-                                $totalSkor = $pendaftaran->nilai ? $pendaftaran->nilai->details->avg('skor') : 0;
-                            @endphp
-                            <span class="badge bg-primary fs-6">{{ number_format($totalSkor, 1) }}</span>
-                        </div>
-                    </div>
+                // Logika Predikat Baris
+                if (!$detail) { $predikat = '-'; $color = 'text-muted'; }
+                elseif ($skor >= 85) { $predikat = 'Sangat Baik'; $color = 'text-success'; }
+                elseif ($skor >= 75) { $predikat = 'Baik'; $color = 'text-primary'; }
+                elseif ($skor >= 60) { $predikat = 'Cukup'; $color = 'text-warning'; }
+                else { $predikat = 'Kurang'; $color = 'text-danger'; }
+            @endphp
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 py-2">
+                <span class="text-muted" style="width: 30px;">{{ $loop->iteration }}</span>
+                <span class="flex-grow-1 ms-3 fw-medium text-truncate">{{ $tool->name }}</span>
+                <span class="text-center fw-bold" style="width: 60px;">
+                    {{ $detail ? $skor : '-' }}
+                </span>
+                <span class="text-end  fw-bold {{ $color }}" style="width: 100px; font-size: 0.85rem;">
+                    {{ $predikat }}
+                </span>
+            </li>
+        @endforeach
+    </ul>
+
+    <hr class="my-3">
+
+    @php
+        $totalSkor = $pendaftaran->nilai ? $pendaftaran->nilai->details->avg('skor') : 0;
+        
+        // Logika Predikat Rata-rata
+        if ($totalSkor >= 85) { $finalLabel = 'Sangat Baik'; $badgeColor = 'bg-success'; }
+        elseif ($totalSkor >= 75) { $finalLabel = 'Baik'; $badgeColor = 'bg-primary'; }
+        elseif ($totalSkor >= 60) { $finalLabel = 'Cukup'; $badgeColor = 'bg-warning text-dark'; }
+        else { $finalLabel = 'Kurang'; $badgeColor = 'bg-danger'; }
+    @endphp
+
+    <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3">
+        <div>
+            <span class="d-block fw-bold">Rata-rata</span>
+            <small class="text-black">Predikat: <strong>{{ $finalLabel }}</strong></small>
+        </div>
+        <div class="text-end">
+            <span class="badge {{ $badgeColor }} px-3 py-2 fs-5">{{ number_format($totalSkor, 1) }}</span>
+        </div>
+    </div>
+</div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     </div>
@@ -173,7 +203,8 @@
                     @method('PATCH') {{-- Gunakan PATCH atau POST sesuai route Anda --}}
 
                     <div class="modal-header bg-warning">
-                        <h5 class="modal-title text-dark">Upload Sertifikat: {{ $pendaftaran->peserta->nama_lengkap }}</h5>
+                        <h5 class="modal-title text-dark">Upload Sertifikat: {{ $pendaftaran->peserta->nama_lengkap }}
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 

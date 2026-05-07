@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendWaNotification;
 use App\Mail\AnnouncmentEmail;
 use App\Models\Announcment;
 use App\Models\User;
@@ -30,6 +31,10 @@ class AnnouncmentController extends Controller
 
         foreach ($users as $user) {
             Mail::to($user->email)->queue(new AnnouncmentEmail($announcement));
+
+            // Kirim WA ke user
+            $message = "Pengumuman Baru:\nJudul: {$announcement->title}\nTipe: {$announcement->type}\nPesan: {$announcement->message}\nSilakan cek email Anda untuk detail pengumuman.";
+            dispatch(new SendWaNotification($user->phone, $message));
         }
 
         return redirect()->back()->with('success', 'Pengumuman berhasil disebarkan!');
